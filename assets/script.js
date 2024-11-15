@@ -67,12 +67,12 @@ function continueTimer() {
             document.getElementById('startButton').classList.add('pulsing');
         } else {
             clearInterval(timer);
-            document.body.classList.add('flash');
         }
     }, 1000);
 }
 
 function resetTimer() {
+    // do nothing if no timer had been running and leave the function
     if (timer) {
         document.getElementById('startButton').textContent = 'Start';
         stopButton.classList.remove('stopped');

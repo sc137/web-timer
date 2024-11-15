@@ -73,14 +73,16 @@ function continueTimer() {
 }
 
 function resetTimer() {
-    stopTimer();
-    document.getElementById('startButton').textContent = 'Start';
-    stopButton.classList.remove('stopped');
-    timeLeft = initialTime;
-    if (timeLeft == 0) {
+    if (timer) {
+        document.getElementById('startButton').textContent = 'Start';
+        stopButton.classList.remove('stopped');
         timeLeft = initialTime;
+        if (timeLeft == 0) {
+            timeLeft = initialTime;
+        }
+        updateDisplay(timeLeft);
     }
-    updateDisplay(timeLeft);
+    
 }
 
 startButton.addEventListener('click', startTimer);

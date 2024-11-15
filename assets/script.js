@@ -43,7 +43,7 @@ function stopTimer() {
     if (timer) clearInterval(timer);
     document.body.classList.remove('flash');
     document.getElementById('startButton').classList.remove('pulsing');
-    console.log('Timer stopped, timeLeft:', timeLeft);
+    // console.log('Timer stopped, timeLeft:', timeLeft); // for debugging
     if (timeLeft > 0) {
         document.getElementById('startButton').textContent = 'Restart';
         stopButton.classList.add('stopped');
@@ -65,6 +65,9 @@ function continueTimer() {
             timeLeft--;
             updateDisplay(timeLeft);
             document.getElementById('startButton').classList.add('pulsing');
+        } else if (timer == 0) {
+            timer = undefined;
+            initialTime = undefined;
         } else {
             clearInterval(timer);
         }
@@ -76,11 +79,13 @@ function resetTimer() {
     if (timer) {
         document.getElementById('startButton').textContent = 'Start';
         stopButton.classList.remove('stopped');
-        timeLeft = initialTime;
+        // timeLeft = initialTime;
         if (timeLeft == 0) {
             timeLeft = initialTime;
         }
-        updateDisplay(timeLeft);
+        if (timeLeft) {
+            updateDisplay(timeLeft);
+        }
     }
     
 }

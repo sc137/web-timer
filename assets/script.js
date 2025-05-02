@@ -60,6 +60,8 @@ function updateUIState() {
       timeInput.disabled = false; // Allow changing time for next run
       break;
   }
+  // Update tooltips based on current state
+  updateTooltips();
 }
 
 /* Toggle between start and pause states */
@@ -114,6 +116,9 @@ function startTimer() {
   if (isNaN(userMinutes) || userMinutes <= 0) {
     userMinutes = 10;
     timeInput.value = "10"; // Show that we're using 10
+  } else if (userMinutes > 9999) {
+    userMinutes = 9999; // Cap at maximum value
+    timeInput.value = "9999"; // Update the input field
   }
 
   // Convert minutes to seconds
@@ -201,6 +206,32 @@ function resetTimer() {
   updateUIState();
 }
 
+/* Update tooltip text based on timer state */
+function updateTooltips() {
+  // Set tooltips to match the button text and explain the action
+  switch (timerState) {
+    case "idle":
+      startPauseButton.setAttribute("data-tooltip", "Start the countdown");
+      resetButton.setAttribute("data-tooltip", "Reset the timer");
+      break;
+
+    case "running":
+      startPauseButton.setAttribute("data-tooltip", "Pause the countdown");
+      resetButton.setAttribute("data-tooltip", "Stop the countdown");
+      break;
+
+    case "paused":
+      startPauseButton.setAttribute("data-tooltip", "Resume the countdown"); // Fixed to match "Resume" button
+      resetButton.setAttribute("data-tooltip", "Reset to initial time");
+      break;
+
+    case "finished":
+      startPauseButton.setAttribute("data-tooltip", "Stop the alarm");
+      resetButton.setAttribute("data-tooltip", "Reset to initial time");
+      break;
+  }
+}
+
 /* Event Listeners */
 startPauseButton.addEventListener("click", toggleStartPause);
 resetButton.addEventListener("click", handleResetStop);
@@ -215,3 +246,21 @@ timeInput.addEventListener("keydown", (event) => {
 // Initialize the UI
 updateDisplay(0);
 updateUIState();
+
+// Add keyboard shortcuts for common actions
+document.addEventListener("keydown", (event) => {
+  // Space bar to toggle start/pause
+  if (event.code === "Space" && document.activeElement !== timeInput) {
+    event.preventDefault();
+    toggleStartPause();
+  }
+
+  // Escape key to reset or stop alarm
+  if (event.code === "Escape") {
+    if (timerState === "finished") {
+      stopAlarm();
+    } else if (timerState === "running" || timerState === "paused") {
+      resetTimer();
+    }
+  }
+});

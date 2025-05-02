@@ -6,4 +6,12 @@ Use the buttons or press the spacebar to start/pause the timer.
 
 The default time is 10 minutes.
 
-[View this on Github Pages](https://sc137.github.io/web-timer/).
+🌎 [View this on the web](https://sc137.github.io/web-timer/).
+
+![mobile](assets/mobile.png)
+
+![desktop](assets/web.png)
+
+![web-timer in action](web-timer.gif)
+
+*/Sable*

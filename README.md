@@ -8,10 +8,16 @@ The default time is 10 minutes.
 
 🌎 [View this on the web](https://sc137.github.io/web-timer/).
 
-![mobile](assets/mobile.png)
+**Mobile**
+
+<img src="assets/mobile.png” width=“250px">
+
+**Desktop**
 
 ![desktop](assets/web.png)
 
-![web-timer in action](web-timer.gif)
+**Web-timer in Actions**
+
+![](assets/web-timer.gif)
 
 */Sable*

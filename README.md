@@ -10,7 +10,7 @@ The default time is 10 minutes.
 
 **Mobile**
 
-<img src="assets/mobile.png” width=“250px">
+![mobile](assets/mobile.png)
 
 **Desktop**
 

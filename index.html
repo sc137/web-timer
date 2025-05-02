@@ -1,27 +1,25 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="assets/timer-favicon.svg" type="image/svg+xml" />
-    <link ref="icon" href="assets/timer-favicon.png" type="image/png" />
-    <link rel="apple-touch-icon" href="assets/timer-favicon-32x32.png">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="assets/timer-favicon.svg" type="image/svg+xml" />
+        <link ref="icon" href="assets/timer-favicon.png" type="image/png" />
+        <link rel="apple-touch-icon" href="assets/timer-favicon-32x32.png" />
 
-    <title>Web Timer</title>
-    <link href="assets/styles.css" rel="stylesheet" />
-    <script src="assets/script.js" defer></script>
-    <!-- Open this timer to display on Zoom or on a projector -->
-  </head>
-  <body>
-    <div class="timer-container">
-      <div id="timerDisplay">00:00</div>
-      <input type="number" id="timeInput" value="10" placeholder="10" />
-      <div class="button-container">
-        <button id="startButton">Start</button>
-        <button id="stopButton">Stop</button>
-        <button id="continueButton">Continue</button>
-        <button id="resetButton">Reset</button>
-      </div>
-    </div>
-  </body>
+        <title>Web Timer</title>
+        <link href="assets/styles.css" rel="stylesheet" />
+        <script src="assets/script.js" defer></script>
+        <!-- Open this timer to display on Zoom or on a projector -->
+    </head>
+    <body>
+        <div class="timer-container">
+            <div id="timerDisplay">00:00</div>
+            <input type="number" id="timeInput" value="10" placeholder="10" />
+            <div class="button-container">
+                <button id="startPauseButton">Start</button>
+                <button id="resetButton">Reset</button>
+            </div>
+        </div>
+    </body>
 </html>

@@ -1,14 +1,13 @@
 @font-face {
-    font-family: 'Digital-7';
-    src: url('fonts/Digital7-rg1mL.ttf') format('truetype');
+    font-family: "Digital-7";
+    src: url("fonts/Digital7-rg1mL.ttf") format("truetype");
 }
 
 body {
     margin: auto;
     font-size: 16px;
-    background-color: #8EC5FC;
-    background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
-
+    background-color: #8ec5fc;
+    background-image: linear-gradient(62deg, #8ec5fc 0%, #e0c3fc 100%);
 }
 
 .timer-container {
@@ -31,14 +30,14 @@ body {
 #timerDisplay {
     font-size: 8em;
     text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2); /* Slight drop shadow */
-    font-family: 'Digital-7', monospace, sans-serif;
+    font-family: "Digital-7", monospace, sans-serif;
     background-color: rgb(246, 246, 246, 0.7);
     width: 440px;
     text-align: center;
 }
 
 input[type="number"] {
-    width: 100px; 
+    width: 100px;
     font-size: 1.2em;
     padding: 5px;
     margin-top: 10px;
@@ -52,41 +51,122 @@ button {
     background-color: lightgoldenrodyellow;
 }
 
-.flash {
-    content: '';
-    position: absolute;
+/* Default Start button is blue with white text */
+#startPauseButton {
+    background-color: #0066cc; /* Blue */
+    color: white;
+    font-weight: bold;
+}
+
+/* Animation for running timer button */
+@keyframes pulse-green {
+    0% {
+        background-color: #26b226; /* Start with regular green */
+    }
+    50% {
+        background-color: #32d832; /* Pulse to a brighter green */
+    }
+    100% {
+        background-color: #26b226; /* Back to regular green */
+    }
+}
+
+/* Button states with color coding */
+#startPauseButton.running {
+    background-color: #26b226; /* Green when running */
+    color: white;
+    animation: pulse-green 2s infinite; /* Re-add the pulsing animation */
+}
+
+#startPauseButton.paused {
+    background-color: #e0a800; /* Amber when paused - improved contrast */
+    color: white;
+}
+
+#startPauseButton.finished {
+    background-color: #dc3545; /* Red when finished */
+    color: white;
+}
+
+/* Button disabled state */
+#startPauseButton[disabled],
+#resetButton[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Make the reset button more subtle when not applicable */
+#resetButton[disabled] {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    border-color: #6c757d;
+}
+
+/* Stop button styling */
+#resetButton.stop-button {
+    background-color: #dc3545; /* Red for stop */
+    color: white;
+    font-weight: bold;
+}
+
+/* Stop alarm button styling */
+#startPauseButton.stop-alarm {
+    background-color: #dc3545; /* Red for stop */
+    color: white;
+    font-weight: bold;
+    animation: pulse-red 1s infinite; /* Add pulsing to draw attention */
+}
+
+@keyframes pulse-red {
+    0% {
+        background-color: #dc3545; /* Start with regular red */
+    }
+    50% {
+        background-color: #ff4c59; /* Pulse to a brighter red */
+    }
+    100% {
+        background-color: #dc3545; /* Back to regular red */
+    }
+}
+
+/* Flash animation for timer display when finished */
+@keyframes flash-timer {
+    0%,
+    50%,
+    100% {
+        opacity: 1;
+    }
+    25%,
+    75% {
+        opacity: 0.5;
+    }
+}
+
+.flash #timerDisplay {
+    animation: flash-timer 2s infinite;
+}
+
+/* Flash animation for background when time's up */
+@keyframes flash-background {
+    0% {
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+    100% {
+        background-color: rgba(255, 30, 0, 0.5);
+    }
+}
+
+.flash::before {
+    content: "";
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: white;
-    animation: flash-animation 0.9s alternate infinite;
-    z-index: 1;
-}
-
-.stopped {
-    background-color: #ff1e008f;
-}
-
-@keyframes flash-animation {
-    0% { background-color: #ffffff; }
-    100% { background-color: #ff1e00; }
-}
-
-@keyframes pulse {
-    0% {
-        background-color: lightgreen;
-    }
-    50% {
-        background-color: rgb(33, 229, 33);
-    }
-    100% {
-        background-color: lightgreen;
-    }
-}
-
-.pulsing {
-    animation: pulse 2s infinite;
+    background-color: rgba(255, 255, 255, 0.5);
+    animation: flash-background 0.9s alternate infinite;
+    z-index: -1;
+    pointer-events: none;
 }
 
 @media screen and (max-height: 330px) {

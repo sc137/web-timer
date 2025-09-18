@@ -1,4 +1,3 @@
-let timer = null; // Interval ID, or null if no active timer
 let timeLeft = 0; // Current countdown in seconds
 let initialTime = 0; // Original time in seconds
 let timerState = "idle"; // States: "idle", "running", "paused", "finished"
@@ -7,6 +6,35 @@ const timeInput = document.getElementById("timeInput");
 const timerDisplay = document.getElementById("timerDisplay");
 const startPauseButton = document.getElementById("startPauseButton");
 const resetButton = document.getElementById("resetButton");
+const timerWorker = new Worker("assets/timerWorker.js");
+
+timerWorker.addEventListener("message", (event) => {
+  const { type, timeLeft: workerTimeLeft } = event.data;
+
+  switch (type) {
+    case "tick":
+      timeLeft = workerTimeLeft;
+      updateDisplay(timeLeft);
+      break;
+
+    case "paused":
+      timeLeft = workerTimeLeft;
+      updateDisplay(timeLeft);
+      timerState = "paused";
+      updateUIState();
+      break;
+
+    case "finished":
+      timeLeft = 0;
+      updateDisplay(0);
+      timerState = "finished";
+      updateUIState();
+      break;
+
+    case "reset":
+      break;
+  }
+});
 
 /* Helper: Format mm:ss and update display */
 function updateDisplay(seconds) {
@@ -106,11 +134,6 @@ function handleResetStop() {
 
 /* Start the timer from the current input */
 function startTimer() {
-  // Clear any existing timer to avoid duplicates
-  if (timer) {
-    clearInterval(timer);
-  }
-
   // Read user input (default to 10 if empty or invalid)
   let userMinutes = parseInt(timeInput.value, 10);
   if (isNaN(userMinutes) || userMinutes <= 0) {
@@ -130,29 +153,14 @@ function startTimer() {
   timerState = "running";
   updateUIState();
 
-  // Begin countdown
-  timer = setInterval(() => {
-    if (timeLeft > 0) {
-      timeLeft--;
-      updateDisplay(timeLeft);
-    } else {
-      clearInterval(timer);
-      timer = null;
-      timerState = "finished";
-      updateUIState();
-    }
-  }, 1000);
+  timerWorker.postMessage({ type: "start", duration: timeLeft });
 }
 
 /* Pause the timer */
 function pauseTimer() {
-  if (timer) {
-    clearInterval(timer);
-    timer = null;
-  }
-
   timerState = "paused";
   updateUIState();
+  timerWorker.postMessage({ type: "pause" });
 }
 
 /* Resume the countdown from timeLeft */
@@ -162,35 +170,13 @@ function resumeTimer() {
     return;
   }
 
-  // Clear any existing interval just to be safe
-  if (timer) {
-    clearInterval(timer);
-  }
-
   timerState = "running";
   updateUIState();
-
-  timer = setInterval(() => {
-    if (timeLeft > 0) {
-      timeLeft--;
-      updateDisplay(timeLeft);
-    } else {
-      clearInterval(timer);
-      timer = null;
-      timerState = "finished";
-      updateUIState();
-    }
-  }, 1000);
+  timerWorker.postMessage({ type: "resume" });
 }
 
 /* Reset the timer to the input (or default) and stop any existing countdown */
 function resetTimer() {
-  // Stop the current timer if running
-  if (timer) {
-    clearInterval(timer);
-    timer = null;
-  }
-
   // Re-read the input field in case the user changed it
   let userMinutes = parseInt(timeInput.value, 10);
   if (isNaN(userMinutes) || userMinutes <= 0) {
@@ -204,6 +190,7 @@ function resetTimer() {
   // Return to idle state
   timerState = "idle";
   updateUIState();
+  timerWorker.postMessage({ type: "reset" });
 }
 
 /* Update tooltip text based on timer state */
